@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: lightit
+    ports:
+      - "3306:3306"
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  app:
+    container_name: app
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - FASTAPI_ENV=development
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=my-secret-pw
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=lightit
+      - MAILTRAP_USERNAME=f8ba2ad6b879d9
+      - MAILTRAP_PASSWORD=2a56bf1b034502
+      - MAILTRAP_SMTP_HOST=sandbox.smtp.mailtrap.io
+      - MAILTRAP_SMTP_PORT=2525
+    command: bash -c "cd project/app && alembic upgrade head && cd ../.. & uvicorn project.app.api.main:app --host 0.0.0.0 --port 8080 --reload"
+    depends_on: 
+      mysql:
+        condition: service_healthy
+    restart: always
+
+  
+
+
