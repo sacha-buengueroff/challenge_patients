@@ -5,6 +5,12 @@ from decouple import config
 
 
 def get_connection_string():
+    """
+    Creates the connection string using env variables
+
+    Returns:
+        str: connection string
+    """
     USER = config("MYSQL_USER")
     PASSWORD = config("MYSQL_PASSWORD")
     HOST = config("MYSQL_HOST")
@@ -15,6 +21,12 @@ def get_connection_string():
 
 
 def engine_maker():
+    """
+    Creates the engine to connect to the DB
+
+    Returns:
+        Engine: connection engine
+    """
     connection_string = get_connection_string()
     engine = create_engine(connection_string)
     return engine
@@ -22,19 +34,16 @@ def engine_maker():
 
 engine = engine_maker()
 SessionLocal = sessionmaker(bind=engine)
-SessionTest = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_session():
+    """
+    Creates a session to communicate to the DB.
+
+    Yields:
+        Session: an instance of Session
+    """
     db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-def get_session_test():
-    db = SessionTest()
     try:
         yield db
     finally:

@@ -11,7 +11,10 @@ client = TestClient(app)
 app.dependency_overrides[PatientsRepository] = TestPatientsRepository
 
 
-def test_post_client():
+def test_post_patient():
+    """
+    Tests if patient is succesfully created in DB.
+    """
     image = Image.new("RGB", (100, 100), "white")
     image_bytes = io.BytesIO()
     image.save(image_bytes, format="jpeg")
@@ -29,12 +32,18 @@ def test_post_client():
     assert response.json()["status"] == "SUCCESS"
 
 
-def test_get_client():
+def test_get_patient():
+    """
+    Tests GET patients.
+    """
     response = client.get("/patients")
     assert response.status_code == 200
 
 
-def test_post_client_wrong_format_mail():
+def test_post_patient_wrong_format_mail():
+    """
+    Tests if there is an error when sending an incorrect email.
+    """
     image = Image.new("RGB", (100, 100), "white")
     image_bytes = io.BytesIO()
     image.save(image_bytes, format="jpeg")
@@ -57,7 +66,10 @@ def test_post_client_wrong_format_mail():
     )
 
 
-def test_post_client_wrong_format_phone():
+def test_post_patient_wrong_format_phone():
+    """
+    Tests if there is an error when sending an incorrect phone number.
+    """
     image = Image.new("RGB", (100, 100), "white")
     image_bytes = io.BytesIO()
     image.save(image_bytes, format="jpeg")
@@ -79,7 +91,10 @@ def test_post_client_wrong_format_phone():
     )
 
 
-def test_post_client_invalid_file():
+def test_post_patient_invalid_file():
+    """
+    Tests if there is an error when sending an incorrect file.
+    """
     text = "This is a dummy text file for testing."
     file = io.BytesIO(text.encode())
     files = {"document": ("dummy_file.txt", file)}
