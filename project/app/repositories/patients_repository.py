@@ -12,6 +12,16 @@ class PatientsRepository:
         self.session = session
 
     def post_patient(self, document, patient: PatientSchema):
+        """
+        Adds a patient into the DB
+
+        Args:
+            document (bytes): document photo in bytes
+            patient (PatientSchema): patient data in schema format
+
+        Returns:
+            pateitn: patient data in schema format
+        """
         db_patient = Patient(
             name=patient.name,
             email=patient.email,
@@ -24,6 +34,12 @@ class PatientsRepository:
         return patient
 
     def get_patients(self):
+        """
+        Gets all patient data from DB
+
+        Returns:
+            patients: list of dicts with patients data
+        """
         statement = Select(Patient.name, Patient.email, Patient.address, Patient.phone)
         patients = self.session.execute(statement).mappings().all()
         patients = [dict(patient) for patient in patients]
