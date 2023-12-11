@@ -1,10 +1,14 @@
 from fastapi.testclient import TestClient
+from project.app.repositories.patients_repository import PatientsRepository
+from project.app.repositories.test_patients_repository import TestPatientsRepository
 from project.app.api.main import app
 from PIL import Image
 import io
 
 
 client = TestClient(app)
+
+app.dependency_overrides[PatientsRepository] = TestPatientsRepository
 
 
 def test_post_client():

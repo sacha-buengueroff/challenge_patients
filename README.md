@@ -21,7 +21,9 @@ You can check the Swagger docs of the API by going to the following URL: http://
 
 ## Testing
 
-Once the Docker container is running succesfuly you can run the following command to test the app:
+Once the Docker container is running succesfuly you can run the following command to test the app.
+In this project we created a dependency override to avoid writing to the db while testing.
+Normally I would have another db only for the testing environment so data isn't corrupted.
 ```
 docker exec -i app bash -c "cd project && pytest"
 ```
